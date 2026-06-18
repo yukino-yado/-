@@ -1,6 +1,6 @@
 const SVG_NS = "http://www.w3.org/2000/svg";
-const STORAGE_KEY = "mathPrintToolAutoSaveV75";
-const LEGACY_STORAGE_KEYS = ["mathPrintToolAutoSaveV72", "mathPrintToolAutoSaveV71", "mathPrintToolAutoSaveV69", "mathPrintToolAutoSaveV68", "mathPrintToolAutoSaveV67", "mathPrintToolAutoSaveV66", "mathPrintToolAutoSaveV65", "mathPrintToolAutoSaveV64", "mathPrintToolAutoSaveV63", "mathPrintToolAutoSaveV62", "mathPrintToolAutoSaveV61", "mathPrintToolAutoSaveV60", "mathPrintToolAutoSaveV59", "mathPrintToolAutoSaveV57", "mathPrintToolAutoSaveV56", "mathPrintToolAutoSaveV55", "mathPrintToolAutoSaveV54", "mathPrintToolAutoSaveV53", "mathPrintToolAutoSaveV52", "mathPrintToolAutoSaveV51", "mathPrintToolAutoSaveV50", "mathPrintToolAutoSaveV49", "mathPrintToolAutoSaveV48", "mathPrintToolAutoSaveV47", "mathPrintToolAutoSaveV46", "mathPrintToolAutoSaveV45", "mathPrintToolAutoSaveV44", "mathPrintToolAutoSaveV43", "mathPrintToolAutoSaveV42", "mathPrintToolAutoSaveV41", "mathPrintToolAutoSaveV40", "mathPrintToolAutoSaveV39", "mathPrintToolAutoSaveV38", "mathPrintToolAutoSaveV37", "mathPrintToolAutoSaveV36", "mathPrintToolAutoSaveV35", "mathPrintToolAutoSaveV34", "mathPrintToolAutoSaveV33", "mathPrintToolAutoSaveV32", "mathPrintToolAutoSaveV31", "mathPrintToolAutoSaveV30", "mathPrintToolAutoSaveV29", "mathPrintToolAutoSaveV28", "mathPrintToolAutoSaveV27", "mathPrintToolAutoSaveV26", "mathPrintToolAutoSaveV25", "mathPrintToolAutoSaveV24", "mathPrintToolAutoSaveV23", "mathPrintToolAutoSaveV22", "mathPrintToolAutoSaveV21", "mathPrintToolAutoSaveV20", "mathPrintToolAutoSaveV19", "mathPrintToolAutoSaveV18", "mathPrintToolAutoSaveV17", "mathPrintToolAutoSaveV16", "mathPrintToolAutoSaveV15", "mathPrintToolAutoSaveV14", "mathPrintToolAutoSaveV13", "mathPrintToolAutoSaveV12", "mathPrintToolAutoSaveV11", "mathPrintToolAutoSaveV10"];
+const STORAGE_KEY = "mathPrintToolAutoSaveV77";
+const LEGACY_STORAGE_KEYS = ["mathPrintToolAutoSaveV75", "mathPrintToolAutoSaveV72", "mathPrintToolAutoSaveV71", "mathPrintToolAutoSaveV69", "mathPrintToolAutoSaveV68", "mathPrintToolAutoSaveV67", "mathPrintToolAutoSaveV66", "mathPrintToolAutoSaveV65", "mathPrintToolAutoSaveV64", "mathPrintToolAutoSaveV63", "mathPrintToolAutoSaveV62", "mathPrintToolAutoSaveV61", "mathPrintToolAutoSaveV60", "mathPrintToolAutoSaveV59", "mathPrintToolAutoSaveV57", "mathPrintToolAutoSaveV56", "mathPrintToolAutoSaveV55", "mathPrintToolAutoSaveV54", "mathPrintToolAutoSaveV53", "mathPrintToolAutoSaveV52", "mathPrintToolAutoSaveV51", "mathPrintToolAutoSaveV50", "mathPrintToolAutoSaveV49", "mathPrintToolAutoSaveV48", "mathPrintToolAutoSaveV47", "mathPrintToolAutoSaveV46", "mathPrintToolAutoSaveV45", "mathPrintToolAutoSaveV44", "mathPrintToolAutoSaveV43", "mathPrintToolAutoSaveV42", "mathPrintToolAutoSaveV41", "mathPrintToolAutoSaveV40", "mathPrintToolAutoSaveV39", "mathPrintToolAutoSaveV38", "mathPrintToolAutoSaveV37", "mathPrintToolAutoSaveV36", "mathPrintToolAutoSaveV35", "mathPrintToolAutoSaveV34", "mathPrintToolAutoSaveV33", "mathPrintToolAutoSaveV32", "mathPrintToolAutoSaveV31", "mathPrintToolAutoSaveV30", "mathPrintToolAutoSaveV29", "mathPrintToolAutoSaveV28", "mathPrintToolAutoSaveV27", "mathPrintToolAutoSaveV26", "mathPrintToolAutoSaveV25", "mathPrintToolAutoSaveV24", "mathPrintToolAutoSaveV23", "mathPrintToolAutoSaveV22", "mathPrintToolAutoSaveV21", "mathPrintToolAutoSaveV20", "mathPrintToolAutoSaveV19", "mathPrintToolAutoSaveV18", "mathPrintToolAutoSaveV17", "mathPrintToolAutoSaveV16", "mathPrintToolAutoSaveV15", "mathPrintToolAutoSaveV14", "mathPrintToolAutoSaveV13", "mathPrintToolAutoSaveV12", "mathPrintToolAutoSaveV11", "mathPrintToolAutoSaveV10"];
 const DEFAULT_TEXT_COLOR = "#111111";
 const DEFAULT_BLOCK_FRAME = "none";
 const DEFAULT_TEXT_SIZE = "normal";
@@ -1295,7 +1295,7 @@ function saveToBrowser(delay = 250) {
       state.baseFontFamily = baseFontFamilyInput?.value || state.baseFontFamily || "gothic";
       state.pageMarginMm = Math.min(40, Math.max(5, Number(pageMarginInput?.value) || 18));
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      markFileDirty();
+      markDocumentDirty();
       updateSaveStatus("自動保存済み", "saved");
     } catch (error) {
       updateSaveStatus("自動保存できませんでした", "error");
@@ -4804,6 +4804,37 @@ function coordinateToTikz(block) {
   return lines.join("\n");
 }
 
+const DOCUMENT_LIBRARY_KEY = "mathPrintToolDocumentLibraryV77";
+const CURRENT_DOCUMENT_ID_KEY = "mathPrintToolCurrentDocumentIdV77";
+let currentDocumentId = "";
+let hasUnsavedDocumentChanges = false;
+
+function clonePlain(value) { return JSON.parse(JSON.stringify(value)); }
+function appNowIso() { return new Date().toISOString(); }
+function safeDocumentTitle(source = "") { return String(source || state.title || "無題のプリント").trim() || "無題のプリント"; }
+function generateDocumentId() { return crypto?.randomUUID ? crypto.randomUUID() : `doc_${Date.now()}_${Math.random().toString(16).slice(2)}`; }
+function getDocumentLibrary() { try { const parsed = JSON.parse(localStorage.getItem(DOCUMENT_LIBRARY_KEY) || "[]"); return Array.isArray(parsed) ? parsed : []; } catch { return []; } }
+function setDocumentLibrary(library) { localStorage.setItem(DOCUMENT_LIBRARY_KEY, JSON.stringify(Array.isArray(library) ? library : [])); }
+function getCurrentDocument() { return currentDocumentId ? getDocumentLibrary().find((doc) => doc.id === currentDocumentId) || null : null; }
+function updateCurrentDocName() { const label = document.querySelector("#currentDocName"); if (!label) return; const current = getCurrentDocument(); label.textContent = `${current ? current.title : "未保存"}${hasUnsavedDocumentChanges ? " *" : ""}`; }
+function markDocumentDirty() { hasUnsavedDocumentChanges = true; updateCurrentDocName(); }
+function markDocumentSaved() { hasUnsavedDocumentChanges = false; updateCurrentDocName(); }
+function makeDocumentRecord(id = "", title = "") { renderPreview(); const now = appNowIso(); const existing = id ? getDocumentLibrary().find((doc) => doc.id === id) : null; return { id: id || generateDocumentId(), title: safeDocumentTitle(title || state.title), createdAt: existing?.createdAt || now, updatedAt: now, data: clonePlain(state) }; }
+function saveDocumentRecord(record) { const library = getDocumentLibrary(); const index = library.findIndex((doc) => doc.id === record.id); if (index >= 0) library[index] = record; else library.unshift(record); library.sort((a,b)=>String(b.updatedAt||"").localeCompare(String(a.updatedAt||""))); setDocumentLibrary(library); currentDocumentId = record.id; localStorage.setItem(CURRENT_DOCUMENT_ID_KEY, currentDocumentId); markDocumentSaved(); updateSaveStatus(`保存済み：${record.title}`, "saved"); }
+function saveCurrentDocument() { if (!currentDocumentId) { saveAsDocument(); return; } saveDocumentRecord(makeDocumentRecord(currentDocumentId)); }
+function saveAsDocument() { const title = prompt("保存するプリント名を入力してください。", safeDocumentTitle(state.title)); if (title === null) return; saveDocumentRecord(makeDocumentRecord("", title)); }
+function duplicateCurrentDocument() { const title = prompt("複製後のプリント名を入力してください。", `${safeDocumentTitle(state.title)} コピー`); if (title === null) return; saveDocumentRecord(makeDocumentRecord("", title)); }
+function newDocument() { if (hasUnsavedDocumentChanges && !confirm("未保存の変更があります。新規作成しますか？")) return; state = defaultState(); currentDocumentId = ""; localStorage.removeItem(CURRENT_DOCUMENT_ID_KEY); hasUnsavedDocumentChanges = false; migrateStateData(state); renderAll(); saveToBrowser(0); updateCurrentDocName(); updateSaveStatus("新規作成しました", "saved"); }
+function openDocumentFromLibrary(id) { const doc = getDocumentLibrary().find((item)=>item.id===id); if (!doc) { alert("プリントが見つかりませんでした。"); renderLibraryList(); return; } if (hasUnsavedDocumentChanges && !confirm("未保存の変更があります。このプリントを開きますか？")) return; state = clonePlain(doc.data); migrateStateData(state); currentDocumentId = doc.id; localStorage.setItem(CURRENT_DOCUMENT_ID_KEY, currentDocumentId); hasUnsavedDocumentChanges = false; renderAll(); saveToBrowser(0); markDocumentSaved(); updateSaveStatus(`読込済み：${doc.title}`, "saved"); document.querySelector("#libraryDialog")?.close(); }
+function deleteDocumentFromLibrary(id) { const library = getDocumentLibrary(); const doc = library.find((item)=>item.id===id); if (!doc) return; if (!confirm(`「${doc.title}」を削除しますか？`)) return; setDocumentLibrary(library.filter((item)=>item.id!==id)); if (currentDocumentId === id) { currentDocumentId = ""; localStorage.removeItem(CURRENT_DOCUMENT_ID_KEY); hasUnsavedDocumentChanges = false; } renderLibraryList(); updateCurrentDocName(); updateSaveStatus("削除しました", "saved"); }
+function deleteCurrentDocument() { if (!currentDocumentId) { alert("まだアプリ内保存されていません。"); return; } deleteDocumentFromLibrary(currentDocumentId); }
+function formatDocumentTime(value) { if (!value) return ""; const date = new Date(value); if (Number.isNaN(date.getTime())) return ""; return date.toLocaleString("ja-JP", { month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" }); }
+function renderLibraryList() { const list = document.querySelector("#libraryList"); if (!list) return; const library = getDocumentLibrary(); if (!library.length) { list.innerHTML = `<div class="library-empty">保存済みプリントはまだありません。<br>「名前を付けて保存」から保存してください。</div>`; return; } list.innerHTML = library.map((doc)=>`<div class="library-item ${doc.id===currentDocumentId?"active":""}" data-doc-id="${escapeHtml(doc.id)}"><div class="library-item-main"><strong>${escapeHtml(doc.title || "無題のプリント")}</strong><span>更新：${escapeHtml(formatDocumentTime(doc.updatedAt))}</span></div><div class="library-item-actions"><button type="button" data-library-action="open" data-doc-id="${escapeHtml(doc.id)}">開く</button><button type="button" data-library-action="duplicate" data-doc-id="${escapeHtml(doc.id)}">複製</button><button type="button" data-library-action="delete" data-doc-id="${escapeHtml(doc.id)}">削除</button></div></div>`).join(""); list.querySelectorAll("[data-library-action]").forEach((button)=>button.addEventListener("click",()=>{ const id=button.dataset.docId; const action=button.dataset.libraryAction; if(action==="open") openDocumentFromLibrary(id); if(action==="delete") deleteDocumentFromLibrary(id); if(action==="duplicate"){ const doc=getDocumentLibrary().find((item)=>item.id===id); if(!doc) return; const title=prompt("複製後のプリント名を入力してください。", `${doc.title || "無題のプリント"} コピー`); if(title===null) return; saveDocumentRecord({ id:generateDocumentId(), title:safeDocumentTitle(title), createdAt:appNowIso(), updatedAt:appNowIso(), data:clonePlain(doc.data) }); renderLibraryList(); }})); }
+function openLibraryDialog() { renderLibraryList(); const dialog = document.querySelector("#libraryDialog"); if (dialog?.showModal) dialog.showModal(); }
+function exportLibraryBackup() { const payload = { app:"math_print_tool_library", version:77, exportedAt:appNowIso(), currentDocumentId, library:getDocumentLibrary() }; const stamp = new Date().toISOString().slice(0,10).replaceAll("-",""); downloadText(`mathprint_backup_${stamp}.json`, JSON.stringify(payload,null,2), "application/json"); }
+async function importLibraryBackupFile(file) { if (!file) return; try { const payload = JSON.parse(await file.text()); let incoming=[]; if(payload?.app==="math_print_tool_library" && Array.isArray(payload.library)) incoming=payload.library; else if(payload?.app==="math_print_tool" && payload.data) incoming=[{title:payload.data.title||"読込プリント", data:payload.data}]; else if(payload && typeof payload==="object" && Array.isArray(payload.blocks)) incoming=[{title:payload.title||"読込プリント", data:payload}]; else if(Array.isArray(payload)) incoming=payload; if(!incoming.length){ alert("読み込めるプリントデータが見つかりませんでした。"); return; } const library=getDocumentLibrary(); const map=new Map(library.map((doc)=>[doc.id,doc])); incoming.forEach((doc)=>{ if(!doc?.data) return; const id=(doc.id && !map.has(doc.id)) ? doc.id : generateDocumentId(); map.set(id,{ id, title:safeDocumentTitle(doc.title || doc.data.title || "読込プリント"), createdAt:doc.createdAt || appNowIso(), updatedAt:appNowIso(), data:doc.data }); }); setDocumentLibrary(Array.from(map.values()).sort((a,b)=>String(b.updatedAt||"").localeCompare(String(a.updatedAt||"")))); renderLibraryList(); updateSaveStatus("バックアップを読み込みました", "saved"); alert("バックアップを読み込みました。プリント一覧から開けます。"); } catch(error) { console.error(error); alert("バックアップを読み込めませんでした。ファイルを確認してください。"); } }
+function restoreCurrentDocumentPointer() { const savedId = localStorage.getItem(CURRENT_DOCUMENT_ID_KEY) || ""; if (savedId && getDocumentLibrary().some((doc)=>doc.id===savedId)) currentDocumentId = savedId; hasUnsavedDocumentChanges = false; updateCurrentDocName(); }
+
 function downloadText(filename, text, type = "text/plain") {
   const blob = new Blob([text], { type });
   const url = URL.createObjectURL(blob);
@@ -4852,41 +4883,18 @@ document.querySelector("#downloadTexBtn").addEventListener("click", () => {
   downloadText("math-print.tex", generateTex(), "text/x-tex");
 });
 
-document.querySelector("#newFileBtn")?.addEventListener("click", () => {
-  newDocumentFile();
-});
+document.querySelector("#newDocBtn")?.addEventListener("click", () => newDocument());
+document.querySelector("#openLibraryBtn")?.addEventListener("click", () => openLibraryDialog());
+document.querySelector("#saveDocBtn")?.addEventListener("click", () => saveCurrentDocument());
+document.querySelector("#saveAsDocBtn")?.addEventListener("click", () => saveAsDocument());
+document.querySelector("#duplicateDocBtn")?.addEventListener("click", () => duplicateCurrentDocument());
+document.querySelector("#deleteDocBtn")?.addEventListener("click", () => deleteCurrentDocument());
+document.querySelector("#backupExportBtn")?.addEventListener("click", () => exportLibraryBackup());
 
-document.querySelector("#openFileBtn")?.addEventListener("click", () => {
-  openDocumentFile();
-});
-
-document.querySelector("#saveFileBtn")?.addEventListener("click", () => {
-  saveDocumentFile();
-});
-
-document.querySelector("#saveAsFileBtn")?.addEventListener("click", () => {
-  saveAsDocumentFile();
-});
-
-document.querySelector("#loadJsonInput").addEventListener("change", async (event) => {
+document.querySelector("#backupImportInput")?.addEventListener("change", async (event) => {
   const file = event.target.files?.[0];
-  if (!file) return;
-
-  try {
-    const payload = JSON.parse(await file.text());
-    const loaded = extractDocumentState(payload);
-    migrateStateData(loaded);
-    currentFileHandle = null;
-    currentFileName = file.name || "";
-    markFileSaved(currentFileName);
-    renderAll();
-    saveToBrowser(0);
-    if (saveStatus) saveStatus.textContent = `読込済み：${currentFileName}`;
-  } catch (error) {
-    alert("データを読み込めませんでした。ファイルを確認してください。");
-  } finally {
-    event.target.value = "";
-  }
+  await importLibraryBackupFile(file);
+  event.target.value = "";
 });
 
 document.querySelector("#exportAllSavesBtn")?.addEventListener("click", () => {
@@ -4897,21 +4905,12 @@ document.querySelector("#clearSavedBtn")?.addEventListener("click", () => {
   clearBrowserSave();
 });
 
-window.addEventListener("beforeunload", (event) => {
-  if (!hasUnsavedFileChanges) return;
-  event.preventDefault();
-  event.returnValue = "";
-});
-
 window.addEventListener("resize", () => { cachedPageHeightPx = null; updatePageStatus(); });
 
 window.addEventListener("load", () => {
   const loaded = loadFromBrowser();
   migrateStateData(state);
   renderAll();
-  hasUnsavedFileChanges = false;
-  updateCurrentFileLabel();
-  if (loaded) {
-    updateSaveStatus("自動保存を復元しました", "saved");
-  }
+  restoreCurrentDocumentPointer();
+  if (loaded) updateSaveStatus("自動保存を復元しました", "saved");
 });

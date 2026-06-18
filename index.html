@@ -14,18 +14,49 @@
       <p>普通に入力した式を、裏でLaTeXへ変換して表示します。文中の分数も大きく表示し、本文でも数式補助を使えます。</p>
     </div>
     <div class="header-actions">
-      <button id="printBtn" class="primary">PDF保存 / 印刷</button>
-      <button id="downloadTexBtn">TeX出力</button>
-      <button id="downloadJsonBtn">データ保存</button>
-      <button id="exportAllSavesBtn" type="button">全保存データ退避</button>
-      <label class="file-label">
-        データ読込
-        <input id="loadJsonInput" type="file" accept="application/json" />
-      </label>
-      <button id="clearSavedBtn" type="button">自動保存を削除</button>
+      <details class="file-menu">
+        <summary>ファイル</summary>
+        <div class="file-menu-panel">
+          <button id="newDocBtn" type="button">新規作成</button>
+          <button id="openLibraryBtn" type="button">プリント一覧</button>
+          <button id="saveDocBtn" type="button">上書き保存</button>
+          <button id="saveAsDocBtn" type="button">名前を付けて保存</button>
+          <button id="duplicateDocBtn" type="button">複製して保存</button>
+          <button id="deleteDocBtn" type="button">このプリントを削除</button>
+          <hr />
+          <button id="backupExportBtn" type="button">バックアップ出力</button>
+          <label class="file-menu-upload">
+            バックアップ読込
+            <input id="backupImportInput" type="file" accept="application/json,.mathprint,.json" />
+          </label>
+          <hr />
+          <button id="printBtn" class="primary" type="button">PDF保存 / 印刷</button>
+          <button id="downloadTexBtn" type="button">TeX出力</button>
+          <button id="exportAllSavesBtn" type="button">全保存データ退避</button>
+          <button id="clearSavedBtn" type="button">自動保存を削除</button>
+        </div>
+      </details>
+      <span id="currentDocName" class="current-file-name">未保存</span>
       <span id="saveStatus" class="save-status">自動保存待機中</span>
     </div>
   </header>
+
+  <dialog id="libraryDialog" class="library-dialog">
+    <form method="dialog" class="library-modal">
+      <div class="library-modal-header">
+        <div>
+          <h2>保存済みプリント</h2>
+          <p>このブラウザに保存されたプリントを開いて再編集できます。</p>
+        </div>
+        <button value="close" class="dialog-close" type="submit">×</button>
+      </div>
+      <div id="libraryList" class="library-list"></div>
+      <div class="library-modal-footer">
+        <button id="closeLibraryBtn" value="close" type="submit">閉じる</button>
+      </div>
+    </form>
+  </dialog>
+
 
   <main class="layout">
     <section class="editor-panel" aria-label="編集画面">
