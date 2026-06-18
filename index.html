@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数学プリント作成ツール</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>数学プリント作成ツール</h1>
+      <p>普通に入力した式を、裏でLaTeXへ変換して表示します。文中の分数も大きく表示し、本文でも数式補助を使えます。</p>
+    </div>
+    <div class="header-actions">
+      <button id="printBtn" class="primary">PDF保存 / 印刷</button>
+      <button id="downloadTexBtn">TeX出力</button>
+      <button id="downloadJsonBtn">データ保存</button>
+      <button id="exportAllSavesBtn" type="button">全保存データ退避</button>
+      <label class="file-label">
+        データ読込
+        <input id="loadJsonInput" type="file" accept="application/json" />
+      </label>
+      <button id="clearSavedBtn" type="button">自動保存を削除</button>
+      <span id="saveStatus" class="save-status">自動保存待機中</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="editor-panel" aria-label="編集画面">
+      <div class="card meta-card">
+        <label>
+          プリントタイトル
+          <input id="titleInput" type="text" value="分数の計算" />
+        </label>
+        <label>
+          単元名
+          <input id="unitInput" type="text" value="中1 数学 / 正負の数" />
+        </label>
+        <label>
+          名前欄
+          <input id="nameLineInput" type="text" value="名前：＿＿＿＿＿＿＿＿＿＿＿＿" />
+        </label>
+        <div class="two-columns equal-columns">
+          <label>
+            用紙サイズ
+            <select id="paperSizeInput">
+              <option value="A3">A3</option>
+              <option value="A4">A4</option>
+              <option value="B5">B5</option>
+              <option value="A5">A5</option>
+              <option value="B4">B4</option>
+              <option value="Letter">Letter</option>
+            </select>
+          </label>
+          <label>
+            用紙の向き
+            <select id="paperOrientationInput">
+              <option value="portrait">縦</option>
+              <option value="landscape">横</option>
+            </select>
+          </label>
+        </div>
+        <div class="two-columns equal-columns">
+          <label>
+            基本フォント
+            <select id="baseFontFamilyInput">
+              <option value="gothic">ゴシック</option>
+              <option value="mincho">明朝</option>
+              <option value="meiryogothic">メイリオ</option>
+              <option value="yuGothic">游ゴシック</option>
+              <option value="yuMincho">游明朝</option>
+              <option value="rounded">丸ゴシック</option>
+              <option value="serif">欧文セリフ</option>
+              <option value="sans">欧文サンセリフ</option>
+            </select>
+          </label>
+          <label>
+            基本フォントサイズ
+            <div class="word-size-control">
+              <input id="baseFontSizeInput" type="number" min="6" max="72" step="0.5" value="11" />
+              <span>pt</span>
+            </div>
+          </label>
+        </div>
+        <div class="two-columns equal-columns">
+          <label>
+            ページ余白
+            <div class="word-size-control">
+              <input id="pageMarginInput" type="number" min="5" max="40" step="1" value="18" />
+              <span>mm</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="toolbar card compact-toolbar">
+        <details open>
+          <summary>よく使う</summary>
+          <div class="toolbar-group">
+            <button data-add="heading">見出し</button>
+            <button data-add="text">本文</button>
+            <button data-add="math">数式</button>
+          </div>
+          <div class="helper-text">横並び問題・横並び計算も、基本は「本文」で作れます。</div>
+        </details>
+        <details>
+          <summary>レイアウト</summary>
+          <div class="toolbar-group">
+            <button data-add="sidebox">横並び枠</button>
+            <button data-add="testLayout">テスト2列</button>
+            <button data-add="answer">解答欄</button>
+          </div>
+        </details>
+        <details>
+          <summary>詳細ツール</summary>
+          <div class="toolbar-group">
+            <button data-add="problem">問題</button>
+          </div>
+          <div class="helper-text">解答欄つきの専用問題を作るときだけ使います。通常は本文でOKです。</div>
+        </details>
+      </div>
+
+      <details class="sub-tool card">
+        <summary>作図サブツール</summary>
+        <p>必要なときだけ、数直線・図形・座標グラフをプリントへ追加できます。</p>
+        <div class="diagram-toolbar">
+          <button data-add="numberline">数直線</button>
+          <button data-add="geometry">基本図形</button>
+          <button data-add="coordinate">座標・グラフ</button>
+        </div>
+      </details>
+
+      <div id="blocks" class="blocks"></div>
+    </section>
+
+    <section class="preview-panel" aria-label="プレビュー">
+      <div class="preview-toolbar">
+        <span>プレビュー</span>
+        <span id="pageStatus" class="page-status">A4確認中</span>
+        <span class="hint">例：1/2 → \frac{1}{2} → 縦の分数表示</span>
+      </div>
+      <article id="printArea" class="paper"></article>
+    </section>
+  </main>
+
+  <template id="blockTemplate">
+    <div class="block card" draggable="true">
+      <div class="block-header">
+        <strong class="block-title"></strong>
+        <div class="block-actions">
+          <button type="button" data-action="up">↑</button>
+          <button type="button" data-action="down">↓</button>
+          <button type="button" data-action="delete" class="danger">削除</button>
+        </div>
+      </div>
+      <div class="block-body"></div>
+    </div>
+  </template>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,2150 @@
+:root {
+  --print-font-family: "Yu Gothic", "YuGothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  --bg: #f3f4f6;
+  --panel: #ffffff;
+  --ink: #222222;
+  --muted: #6b7280;
+  --line: #d7dce3;
+  --accent: #2563eb;
+  --danger: #b91c1c;
+  --paper: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--bg);
+  font-family: "Yu Gothic", "YuGothic", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+.file-label {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+button:hover,
+.file-label:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+button.danger,
+.block-actions .danger {
+  color: var(--danger);
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.92);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.app-header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.file-label {
+  display: inline-flex;
+  align-items: center;
+  background: #fff;
+}
+
+.file-label input {
+  display: none;
+}
+
+.save-status {
+  align-self: center;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.save-status.saved {
+  color: #166534;
+}
+
+.save-status.error {
+  color: var(--danger);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(360px, 540px) 1fr;
+  gap: 18px;
+  padding: 18px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.editor-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meta-card {
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 11px;
+  background: #fff;
+}
+
+input[type="color"] {
+  min-height: 42px;
+  padding: 4px;
+}
+
+input[type="checkbox"] {
+  width: auto;
+  min-width: 16px;
+  height: 16px;
+  padding: 0;
+}
+
+.checkbox-label {
+  display: flex;
+  grid-template-columns: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.style-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.style-row {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  background: #fbfdff;
+}
+
+.style-row-wide {
+  grid-column: 1 / -1;
+}
+
+.style-row span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.format-help {
+  color: var(--muted);
+  background: #f8fafc;
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  padding: 7px 9px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+textarea {
+  min-height: 76px;
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.toolbar {
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.sub-tool {
+  padding: 12px 14px;
+}
+
+.sub-tool summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.sub-tool p {
+  margin: 8px 0 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.diagram-toolbar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.blocks {
+  display: grid;
+  gap: 12px;
+}
+
+.block {
+  overflow: hidden;
+}
+
+.block.dragging {
+  opacity: 0.55;
+}
+
+.block.drag-over {
+  outline: 2px dashed var(--accent);
+  outline-offset: 3px;
+}
+
+.block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  background: #f8fafc;
+}
+
+.block-title {
+  font-size: 14px;
+}
+
+.block-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.block-actions button {
+  padding: 5px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.block-body {
+  padding: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 130px;
+  gap: 10px;
+}
+
+.equal-columns {
+  grid-template-columns: 1fr 1fr;
+}
+
+.three-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.helper-text {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.preview-panel {
+  min-width: 0;
+}
+
+.preview-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.hint {
+  font-size: 12px;
+}
+
+.page-status {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 9px;
+  background: #fff;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.page-status.warn {
+  border-color: #f97316;
+  background: #fff7ed;
+  color: #c2410c;
+  font-weight: 700;
+}
+
+.paper {
+  width: var(--paper-width, 210mm);
+  min-height: var(--paper-height, 297mm);
+  margin: 0 auto 28px;
+  background: var(--paper);
+  padding: var(--paper-padding-top, 18mm) var(--paper-padding-right, 18mm) var(--paper-padding-bottom, 20mm) var(--paper-padding-left, 18mm);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.16);
+  border: 1px solid #e5e7eb;
+  line-height: 1.8;
+  font-size: var(--base-font-size, 11pt);
+  font-family: var(--print-font-family);
+  position: relative;
+  --page-height: var(--paper-height, 297mm);
+}
+
+.paper.has-page-guides {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--page-height) - 2px),
+    rgba(239, 68, 68, 0.45) calc(var(--page-height) - 2px),
+    rgba(239, 68, 68, 0.45) var(--page-height)
+  );
+}
+
+.paper.is-overflowing {
+  outline: 2px solid rgba(249, 115, 22, 0.65);
+}
+
+.print-head {
+  border-bottom: 2px solid #111;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+}
+
+.print-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.print-title h2 {
+  margin: 0;
+  font-size: 25px;
+}
+
+.print-unit {
+  margin-top: 4px;
+  color: #374151;
+  font-size: 14px;
+}
+
+.print-name {
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.print-block {
+  margin: 12px 0;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.print-heading {
+  margin: 18px 0 8px;
+  padding: 4px 8px;
+  border-left: 5px solid #111;
+  border-bottom: 1px solid #d1d5db;
+  background: #f3f4f6;
+  font-size: 18px;
+  color: #111;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.print-text {
+  white-space: pre-wrap;
+}
+
+.inline-strong {
+  font-weight: 800;
+}
+
+.inline-underline {
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
+}
+
+.inline-marker {
+  background: linear-gradient(transparent 58%, rgba(250, 204, 21, 0.78) 58%);
+  padding: 0 0.08em;
+}
+
+.inline-box {
+  display: inline-block;
+  border: 1.4px solid currentColor;
+  border-radius: 4px;
+  padding: 0 0.28em;
+  margin: 0 0.05em;
+  line-height: 1.38;
+}
+
+.text-size-small { font-size: 0.9em; }
+.text-size-normal { font-size: 1em; }
+.text-size-large { font-size: 1.14em; }
+.text-size-xlarge { font-size: 1.3em; }
+
+.block-align-left { text-align: left; }
+.block-align-center { text-align: center; }
+.block-align-right { text-align: right; }
+
+
+.block-frame-simple,
+.block-frame-double,
+.block-frame-dashed,
+.block-frame-gray {
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+.block-frame-simple { border: 1.5px solid currentColor; }
+.block-frame-double { border: 4px double currentColor; }
+.block-frame-dashed { border: 1.6px dashed currentColor; }
+.block-frame-gray {
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+}
+
+.sidebox-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--box-width, 35%);
+  gap: 12px;
+  align-items: start;
+}
+
+.sidebox-left {
+  grid-template-columns: var(--box-width, 35%) minmax(0, 1fr);
+}
+
+.sidebox-full {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.sidebox-main-text {
+  white-space: pre-wrap;
+  min-width: 0;
+}
+
+.sidebox-note {
+  min-width: 0;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+.math-display {
+  margin: 8px 0;
+  text-align: center;
+  font-size: 1.08em;
+}
+
+.math-inline {
+  margin: 0 0.03em;
+  text-align: left;
+}
+
+.math-block {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 6px 0;
+  display: block !important;
+  font-size: 1.12em;
+  line-height: 1.25;
+}
+
+.math-block-line {
+  width: 100%;
+  text-align: inherit;
+  margin: 3px 0;
+}
+
+.math-block .math-block-inner {
+  display: inline-block !important;
+  width: auto !important;
+  max-width: 100%;
+  text-align: initial;
+}
+
+.math-align-left,
+.math-left-small {
+  text-align: left !important;
+}
+
+.math-align-center,
+.math-center-standard {
+  text-align: center !important;
+}
+
+.math-align-right {
+  text-align: right !important;
+}
+
+.math-align-left .math-block-inner {
+  margin-left: 0 !important;
+  margin-right: auto !important;
+}
+
+.math-align-center .math-block-inner {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.math-align-right .math-block-inner {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+
+.math-block .katex {
+  font-size: 1em;
+}
+
+.math-block .katex-html {
+  text-align: inherit;
+}
+
+.problem-box {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 10px;
+  align-items: start;
+  margin: 10px 0;
+}
+
+.problem-number {
+  font-weight: 700;
+}
+
+.problem-body {
+  min-width: 0;
+}
+
+.answer-space {
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.answer-space.answer-line {
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 27px,
+    #e5e7eb 28px
+  );
+}
+
+.answer-space.answer-box {
+  background: #fff;
+  border: 1.8px solid #111;
+  border-radius: 4px;
+}
+
+
+.problem-row-box {
+  margin: 10px 0;
+}
+
+.problem-row-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--problem-row-columns, 2), minmax(0, 1fr));
+  gap: var(--problem-row-row-gap, 22px) var(--problem-row-column-gap, 18px);
+  width: 100%;
+  align-items: start;
+}
+
+.problem-row-item {
+  min-width: 0;
+  line-height: 1.7;
+}
+
+.problem-row-item .row-answer {
+  margin-top: 6px;
+  border-radius: 6px;
+}
+
+.problem-row-item .row-answer.small { height: 34px; }
+.problem-row-item .row-answer.medium { height: 56px; }
+.problem-row-item .row-answer.large { height: 82px; }
+.problem-row-item .row-answer.xlarge { height: 118px; }
+
+.answer-space.small { height: 42px; }
+.answer-space.medium { height: 72px; }
+.answer-space.large { height: 112px; }
+.answer-space.xlarge { height: 160px; }
+
+.latex-preview {
+  color: var(--muted);
+  font-family: Consolas, Monaco, monospace;
+  font-size: 12px;
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 8px;
+  word-break: break-all;
+}
+
+.inline-math-text {
+  display: inline-block;
+  margin: 0 0.08em;
+  vertical-align: -0.08em;
+  font-size: inherit;
+  line-height: 1.2;
+}
+
+.inline-math-text .katex {
+  font-size: inherit !important;
+}
+
+.inline-math-size-normal { font-size: 1.06em; }
+.inline-math-size-medium { font-size: 1.12em; }
+.inline-math-size-large { font-size: 1.18em; }
+.inline-math-size-xlarge { font-size: 1.26em; }
+
+.problem-body .inline-math-size-medium,
+.problem-body .inline-math-size-large,
+.problem-body .inline-math-size-xlarge,
+.problem-row-item .inline-math-size-medium,
+.problem-row-item .inline-math-size-large,
+.problem-row-item .inline-math-size-xlarge {
+  margin-left: 0.08em;
+  margin-right: 0.08em;
+}
+
+.print-text .katex {
+  font-size: inherit !important;
+}
+
+.diagram-wrap {
+  margin: 8px 0 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.diagram-left {
+  justify-content: flex-start;
+}
+
+.diagram-center {
+  justify-content: center;
+}
+
+.diagram-right {
+  justify-content: flex-end;
+}
+
+.diagram-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.diagram-svg {
+  max-width: 100%;
+  height: auto;
+  overflow: visible;
+  background: #fff;
+}
+
+.diagram-svg text {
+  font-family: inherit;
+  fill: var(--diagram-text-color, currentColor);
+  font-size: 14px;
+}
+
+.diagram-svg .axis,
+.diagram-svg .shape-line {
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.diagram-svg .thin-line {
+  stroke: currentColor;
+  stroke-width: 1;
+  fill: none;
+}
+
+.diagram-svg .grid-line {
+  stroke: #e5e7eb;
+  stroke-width: 1;
+}
+
+.diagram-svg .dashed-line {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-dasharray: 6 5;
+  fill: none;
+}
+
+.diagram-svg .point-open {
+  fill: #fff;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.diagram-svg .point-closed {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.diagram-svg .interval-line {
+  stroke: currentColor;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.diagram-svg .function-line {
+  stroke: currentColor;
+  stroke-width: 2.2;
+  fill: none;
+}
+
+.diagram-svg .right-angle,
+.diagram-svg .angle-mark {
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.diagram-svg .parallel-mark {
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+@media (max-width: 1080px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .paper {
+    width: min(100%, 210mm);
+  }
+
+  .style-controls,
+  .equal-columns,
+  .sidebox-layout,
+  .sidebox-left {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .app-header,
+  .editor-panel,
+  .preview-toolbar {
+    display: none !important;
+  }
+
+  .layout {
+    display: block;
+    padding: 0;
+  }
+
+  .paper {
+    width: auto;
+    min-height: auto;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    background-image: none !important;
+  }
+
+  .diagram-svg {
+    page-break-inside: avoid;
+  }
+
+  @page {
+    margin: 0;
+  }
+}
+
+/* v19: 四角い解答欄の横幅・高さを細かく調整 */
+.answer-space.answer-box {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.answer-space.answer-box.box-tiny {
+  width: 54px;
+  height: 30px !important;
+}
+
+.answer-space.answer-box.box-small {
+  width: 82px;
+  height: 36px !important;
+}
+
+.answer-space.answer-box.box-medium {
+  width: 124px;
+  height: 46px !important;
+}
+
+.answer-space.answer-box.box-large {
+  width: 172px;
+  height: 58px !important;
+}
+
+.answer-space.answer-box.box-xlarge {
+  width: 230px;
+  height: 76px !important;
+}
+
+.problem-row-item .answer-space.answer-box.box-tiny {
+  width: 46px;
+  height: 28px !important;
+}
+
+.problem-row-item .answer-space.answer-box.box-small {
+  width: 70px;
+  height: 34px !important;
+}
+
+.problem-row-item .answer-space.answer-box.box-medium {
+  width: 104px;
+  height: 42px !important;
+}
+
+.problem-row-item .answer-space.answer-box.box-large {
+  width: 138px;
+  height: 52px !important;
+}
+
+.problem-row-item .answer-space.answer-box.box-xlarge {
+  width: 180px;
+  height: 68px !important;
+}
+
+/* v20: 解答欄をドラッグ移動できるようにする */
+.draggable-answer {
+  position: relative;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  will-change: transform;
+  transition: box-shadow 0.12s ease, outline-color 0.12s ease;
+}
+
+.draggable-answer.answer-moved {
+  outline: 1px dashed rgba(37, 99, 235, 0.45);
+  outline-offset: 2px;
+}
+
+.draggable-answer.dragging-answer {
+  cursor: grabbing;
+  z-index: 20;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18), 0 10px 24px rgba(15, 23, 42, 0.16);
+}
+
+.small-btn {
+  align-self: end;
+  min-height: 38px;
+}
+
+@media print {
+  .draggable-answer.answer-moved {
+    outline: none;
+  }
+}
+
+/* v21: 問題文の横に解答枠を置くレイアウト */
+.problem-answer-layout {
+  width: 100%;
+}
+
+.problem-answer-content,
+.problem-row-content {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.problem-answer-layout.problem-answer-left,
+.problem-answer-layout.problem-answer-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.problem-answer-layout.problem-answer-left .inline-answer,
+.problem-answer-layout.problem-answer-right .inline-answer {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+
+.problem-answer-layout.problem-answer-left .answer-space.answer-line,
+.problem-answer-layout.problem-answer-right .answer-space.answer-line {
+  width: 120px;
+}
+
+.problem-answer-layout.problem-answer-left .answer-space.answer-box,
+.problem-answer-layout.problem-answer-right .answer-space.answer-box {
+  flex: 0 0 auto;
+}
+
+.problem-answer-layout.problem-answer-bottom .below-answer,
+.problem-answer-layout.problem-answer-free .below-answer {
+  margin-top: 8px;
+}
+
+.problem-row-item .problem-answer-layout.problem-answer-left,
+.problem-row-item .problem-answer-layout.problem-answer-right {
+  gap: 8px;
+}
+
+.problem-row-item .problem-answer-layout.problem-answer-left .answer-space.answer-line,
+.problem-row-item .problem-answer-layout.problem-answer-right .answer-space.answer-line {
+  width: 86px;
+}
+
+@media print {
+  .problem-answer-layout.problem-answer-left,
+  .problem-answer-layout.problem-answer-right {
+    break-inside: avoid;
+  }
+}
+
+
+/* v22: 横並び問題の設定メニューを整理 */
+.settings-section {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+.settings-section summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 9px 11px;
+  color: #334155;
+  user-select: none;
+}
+
+.settings-section[open] summary {
+  border-bottom: 1px solid var(--line);
+}
+
+.settings-section > :not(summary) {
+  margin: 10px;
+}
+
+.settings-section .three-columns,
+.settings-section .two-columns {
+  margin: 10px;
+}
+
+.settings-section label {
+  margin: 10px;
+}
+
+/* v22: 分数の後ろの文字や大きい括弧を見やすくする */
+.problem-body .katex,
+.problem-row-item .katex {
+  white-space: nowrap;
+}
+
+/* v23: 左側の編集パネルだけを独立してスクロール */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  flex: 0 0 auto;
+}
+
+.layout {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.editor-panel {
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-gutter: stable;
+}
+
+.preview-panel {
+  min-height: 0;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+.problem-row-manual-gap {
+  grid-column: 1 / -1;
+  height: var(--problem-row-manual-gap, 56px);
+  min-height: 0;
+}
+
+.tall-textarea {
+  min-height: 150px;
+}
+
+@media (max-width: 1080px) {
+  body {
+    height: auto;
+    min-height: 100%;
+    overflow: auto;
+    display: block;
+  }
+
+  .layout {
+    height: auto;
+    overflow: visible;
+  }
+
+  .editor-panel,
+  .preview-panel {
+    overflow: visible;
+    padding-right: 0;
+  }
+}
+
+@media print {
+  html,
+  body {
+    height: auto;
+    overflow: visible;
+    display: block;
+  }
+
+  .layout,
+  .preview-panel {
+    overflow: visible;
+  }
+}
+
+/* v24: 数式補助ボタン */
+.math-helper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 4px;
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.math-helper span {
+  color: var(--muted);
+  font-size: 12px;
+  margin-right: 2px;
+}
+
+.math-insert-btn {
+  padding: 5px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  background: #fff;
+}
+
+/* v24: 文中の分数を小さくしない */
+.inline-math-text {
+  vertical-align: middle;
+  line-height: 1.35;
+}
+
+.inline-math-text .mfrac {
+  font-size: 1em;
+}
+
+.print-text .inline-math-text,
+.problem-body .inline-math-text,
+.problem-row-item .inline-math-text {
+  margin-left: 0.06em;
+  margin-right: 0.06em;
+}
+
+.problem-common-box .inline-math-size-normal { font-size: 1.12em; }
+.problem-common-box .inline-math-size-medium { font-size: 1.18em; }
+.problem-common-box .inline-math-size-large { font-size: 1.24em; }
+.problem-common-box .inline-math-size-xlarge { font-size: 1.34em; }
+
+/* v24: 問題ブロックに横並び表示を統合 */
+.problem-common-box.problem-row-box {
+  display: block;
+}
+
+/* v26: 問題ブロックの設定を「内容 → 内容の書式 → 解答欄 → 枠・装飾」に整理 */
+.section-body {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+}
+
+.settings-section > .section-body {
+  margin: 0;
+}
+
+.settings-subsection {
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.settings-subsection summary {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 8px 10px;
+  color: #475569;
+  background: #f8fafc;
+  user-select: none;
+}
+
+.settings-subsection[open] summary {
+  border-bottom: 1px dashed #cbd5e1;
+}
+
+.settings-subsection > :not(summary) {
+  margin: 10px;
+}
+
+.settings-subsection .three-columns,
+.settings-subsection .two-columns {
+  margin: 10px;
+}
+
+.settings-subsection label {
+  margin: 10px;
+}
+
+.settings-section .section-body > label,
+.settings-section .section-body > .three-columns,
+.settings-section .section-body > .two-columns,
+.settings-section .section-body > .helper-text,
+.settings-section .section-body > .format-help,
+.settings-section .section-body > .math-helper {
+  margin: 0;
+}
+
+/* v28: 本文用の自由移動できる補助枠 */
+.text-with-floating-note {
+  position: relative;
+  min-height: 1.8em;
+}
+
+.text-with-floating-note.has-floating-note {
+  min-height: 96px;
+}
+
+.floating-note-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--note-width, 170px);
+  min-height: 42px;
+  background: #fff;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  z-index: 2;
+  user-select: none;
+  touch-action: none;
+}
+
+.draggable-floating-note {
+  cursor: grab;
+}
+
+.draggable-floating-note.note-moved {
+  outline: 1px dashed rgba(37, 99, 235, 0.35);
+  outline-offset: 2px;
+}
+
+.draggable-floating-note.dragging-floating-note {
+  cursor: grabbing;
+  outline: 2px solid rgba(37, 99, 235, 0.55);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
+}
+
+@media print {
+  .draggable-floating-note.note-moved,
+  .draggable-floating-note.dragging-floating-note {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+
+/* v30: PDF保存時のA4改ページ修正
+   これまで左パネル独立スクロール用の高さ・overflow指定が印刷時にも残り、
+   A4からはみ出した部分が2ページ目へ流れにくいことがありました。
+   印刷時だけ、プレビューを通常の縦方向文書として扱います。 */
+@media print {
+  html,
+  body {
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    display: block !important;
+    background: #fff !important;
+  }
+
+  .app-header,
+  .editor-panel,
+  .preview-toolbar {
+    display: none !important;
+  }
+
+  .layout,
+  .preview-panel,
+  #printArea,
+  .paper {
+    display: block !important;
+    position: static !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+    background: #fff !important;
+    background-image: none !important;
+  }
+
+  /* ブロックごとに「絶対に分割しない」指定が強すぎると、
+     ブラウザが2ページ目へ流せずにはみ出す場合があるため解除します。 */
+  .print-block,
+  .problem-common-box,
+  .problem-row-box,
+  .problem-box,
+  .sidebox-print,
+  .problem-answer-layout {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+    overflow: visible !important;
+  }
+
+  /* 図や解答枠だけはなるべく途中で切らない */
+  .diagram-svg,
+  .answer-space,
+  .inline-answer,
+  .below-answer,
+  .floating-note-box {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .draggable-answer,
+  .draggable-floating-note {
+    transform: translate(var(--drag-x, 0px), var(--drag-y, 0px)) !important;
+  }
+
+  @page {
+    margin: 0;
+  }
+}
+
+/* v31: Word風のA4ページ分割プレビュー */
+#printArea.paper.paged-preview {
+  width: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  outline: none;
+}
+
+#printArea.paged-preview .print-page {
+  width: var(--paper-width, 210mm);
+  min-height: var(--paper-height, 297mm);
+  box-sizing: border-box;
+  margin: 0 auto 28px;
+  padding: var(--paper-padding-top, 18mm) var(--paper-padding-right, 18mm) var(--paper-padding-bottom, 20mm) var(--paper-padding-left, 18mm);
+  background: var(--paper);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.16);
+  border: 1px solid #e5e7eb;
+  line-height: 1.8;
+  font-size: var(--base-font-size, 11pt);
+  position: relative;
+}
+
+#printArea.paged-preview .print-page-body {
+  min-height: var(--paper-body-height, calc(297mm - 38mm));
+}
+
+#printArea.paged-preview .print-page-label {
+  position: absolute;
+  right: 8mm;
+  bottom: 5mm;
+  color: #9ca3af;
+  font-size: 11px;
+  user-select: none;
+}
+
+@media print {
+  #printArea.paper.paged-preview {
+    display: block !important;
+    width: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+  }
+
+  #printArea.paged-preview .print-page {
+    width: 210mm !important;
+    min-height: 297mm !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: var(--paper-padding-top, 18mm) var(--paper-padding-right, 18mm) var(--paper-padding-bottom, 20mm) var(--paper-padding-left, 18mm) !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    border: none !important;
+    break-after: page;
+    page-break-after: always;
+    overflow: visible !important;
+  }
+
+  #printArea.paged-preview .print-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  #printArea.paged-preview .print-page-body {
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  #printArea.paged-preview .print-page-label {
+    display: none !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
+
+
+/* v32: プレビューもA4単位で本文を切り出して表示する */
+#printArea.paged-preview-sliced {
+  position: relative;
+}
+
+#printArea.paged-preview-sliced .print-flow-source {
+  position: absolute;
+  left: -99999px;
+  top: 0;
+  width: calc(var(--paper-width, 210mm) - var(--paper-padding-left, 18mm) - var(--paper-padding-right, 18mm));
+  box-sizing: border-box;
+  visibility: hidden;
+  pointer-events: none;
+  line-height: 1.8;
+}
+
+#printArea.paged-preview-sliced .print-page-body {
+  height: var(--paper-body-height, calc(297mm - 38mm));
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+#printArea.paged-preview-sliced .print-page-slice {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 1.8;
+  transform-origin: top left;
+}
+
+@media print {
+  .print-heading {
+    color: #111 !important;
+    border-left: 5px solid #111 !important;
+    border-bottom: 1px solid #d1d5db !important;
+    background: #f3f4f6 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #printArea.paged-preview-sliced .print-flow-source {
+    display: none !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page-body {
+    height: calc(297mm - 38mm) !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page-slice {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* v34: 本文補助枠を複数追加できる編集UI */
+.note-editor {
+  border: 1px solid #d7dee8;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+  background: #fbfdff;
+}
+
+.note-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.note-editor-head strong {
+  font-size: 13px;
+}
+
+
+/* v37: テスト2列レイアウト */
+.test-layout-block {
+  position: relative;
+  min-height: var(--test-layout-height, 180mm);
+  border: 1.5px solid #111;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  margin: 10px 0 14px;
+}
+
+.test-layout-header {
+  min-height: 18mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1.5px solid #111;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 4mm 8mm;
+  text-align: center;
+}
+
+.test-layout-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(var(--test-layout-height, 180mm) - 18mm);
+  position: relative;
+}
+
+.test-layout-columns::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  border-left: var(--center-line-width, 1px) var(--center-line-style, solid) var(--center-line-color, #111);
+  transform: translateX(-0.5px);
+  pointer-events: none;
+}
+
+.test-layout-column {
+  padding: 8mm 10mm 18mm;
+  min-width: 0;
+}
+
+.test-layout-block[style*="--center-line-style: none"] .test-layout-columns::before {
+  display: none;
+}
+
+.test-layout-column-title {
+  font-weight: 800;
+  margin-bottom: 5mm;
+}
+
+.test-layout-column-body {
+  white-space: pre-wrap;
+  line-height: 2.0;
+}
+
+.test-layout-answer-box {
+  position: absolute;
+  right: 10mm;
+  bottom: 8mm;
+  width: 38mm;
+  height: 16mm;
+  border: 1.8px solid #111;
+  border-radius: 4px;
+  background: #fff;
+}
+
+
+/* v39: 問題グリッドと補助枠ページ跨ぎ調整 */
+.problem-row-grid.problem-row-3 {
+  align-items: start;
+}
+
+.problem-row-grid.problem-row-3 .problem-row-item {
+  min-height: 1.8em;
+}
+
+#printArea.paged-preview-sliced .print-page-slice .floating-note-box,
+#printArea.paged-preview-sliced .print-page-slice .draggable-floating-note {
+  visibility: visible;
+}
+
+#printArea.paged-preview-sliced .print-flow-source .floating-note-box,
+#printArea.paged-preview-sliced .print-flow-source .draggable-floating-note {
+  visibility: hidden;
+}
+
+
+/* v40: 自由配置問題 */
+.free-problem-canvas {
+  position: relative;
+  min-height: var(--free-canvas-height, 95mm);
+  margin: 8px 0 12px;
+  outline: 1px dashed rgba(37, 99, 235, 0.25);
+  outline-offset: 2px;
+}
+
+.free-problem-item {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-block;
+  min-width: 42px;
+  min-height: 1.6em;
+  padding: 2px 4px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.01);
+  transform: translate(var(--free-x, 0px), var(--free-y, 0px));
+}
+
+.free-problem-item:hover {
+  outline: 1px dashed rgba(37, 99, 235, 0.45);
+  background: rgba(37, 99, 235, 0.04);
+}
+
+.free-problem-item.dragging-free-problem {
+  cursor: grabbing;
+  outline: 2px solid rgba(37, 99, 235, 0.55);
+  z-index: 5;
+}
+
+@media print {
+  .free-problem-canvas {
+    outline: none !important;
+  }
+  .free-problem-item {
+    outline: none !important;
+    background: transparent !important;
+  }
+}
+
+
+/* v42: Word風ページ固定補助枠 */
+.text-with-floating-note {
+  position: static;
+}
+
+.word-floating-note {
+  position: absolute !important;
+  transform: none !important;
+  z-index: 30;
+  cursor: move;
+  touch-action: none;
+  user-select: none;
+}
+
+.word-floating-note:hover {
+  outline: 1.5px dashed rgba(37, 99, 235, 0.65);
+  outline-offset: 2px;
+}
+
+.word-floating-note.dragging-floating-note {
+  outline: 2px solid rgba(37, 99, 235, 0.85);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+}
+
+#printArea.paged-preview-sliced .print-page-slice .floating-note-box,
+#printArea.paged-preview-sliced .print-page-slice .draggable-floating-note {
+  display: none !important;
+}
+
+@media print {
+  .word-floating-note {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
+
+/* v43: Word風の2分割中心線 */
+.test-layout-block {
+  --center-line-style: solid;
+  --center-line-width: 1px;
+  --center-line-color: #111;
+}
+
+@media print {
+  .test-layout-columns::before {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+
+/* v48: ツール整理 */
+.compact-toolbar { display: grid; gap: 10px; }
+.compact-toolbar details { border: 1px solid #e5e7eb; border-radius: 10px; padding: 8px; background: #fbfdff; }
+.compact-toolbar summary { cursor: pointer; font-weight: 700; margin-bottom: 8px; }
+.toolbar-group { display: flex; flex-wrap: wrap; gap: 8px; }
+
+
+/* v49: テスト2列は外枠・ヘッダーなし。中央線だけ残す */
+.test-layout-clean {
+  border: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  background: transparent !important;
+  margin: 4px 0 10px !important;
+}
+
+.test-layout-clean .test-layout-columns {
+  min-height: var(--test-layout-height, 180mm);
+}
+
+.test-layout-clean .test-layout-column {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* v49: 横並び計算 */
+.problem-layout-calc {
+  align-items: start;
+}
+
+.problem-layout-calc .problem-row-item {
+  white-space: pre-wrap;
+  line-height: 2.0;
+  min-height: 7em;
+  break-inside: avoid;
+}
+
+.problem-layout-calc .problem-row-content {
+  white-space: pre-wrap;
+}
+
+
+/* v50: 問題配置は基本自動判定 */
+.mini-note {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 3px;
+}
+
+
+/* v51: 本文ブロックで横並び問題・横並び計算 */
+.text-auto-grid {
+  margin: 4px 0 8px;
+}
+
+.text-auto-item {
+  min-height: 1.8em;
+}
+
+.text-auto-content {
+  white-space: normal;
+}
+
+.problem-layout-calc .text-auto-content {
+  white-space: pre-wrap;
+}
+
+
+/* v52: ##...## の固まりを本文横並びの1セルとして扱う */
+.text-auto-grid .text-auto-content {
+  line-height: 1.9;
+}
+
+.text-auto-grid .text-auto-item {
+  break-inside: avoid;
+}
+
+
+/* v53: 本文横並びの横間隔はpx指定 */
+.text-auto-grid {
+  column-gap: var(--problem-row-column-gap, 80px);
+}
+
+
+/* v55: 分数・√が入る行の縦間隔を自動調整 */
+.auto-math-line {
+  display: inline-block;
+  width: 100%;
+  vertical-align: top;
+  min-height: 1.55em;
+}
+
+.auto-math-line.tall-math-line {
+  min-height: 2.55em;
+  padding-top: 0.18em;
+  padding-bottom: 0.2em;
+}
+
+.auto-math-line.tall-math-line + br {
+  line-height: 0.7;
+}
+
+.text-auto-content,
+.problem-row-content,
+.problem-answer-content,
+.test-layout-column-body,
+.print-text {
+  line-height: 1.85;
+}
+
+.text-auto-content .tall-math-line,
+.problem-row-content .tall-math-line,
+.problem-answer-content .tall-math-line {
+  margin: 0.12em 0;
+}
+
+.katex {
+  line-height: 1.35;
+}
+
+.katex-display {
+  margin: 0.35em 0;
+}
+
+
+
+
+/* v64: 用紙下端ではみ出しそうな文・図を次ページへ送る */
+.print-block,
+.sidebox-layout,
+.test-layout-block,
+.diagram-block,
+.numberline-block,
+.coordinate-block,
+.geometry-block,
+.text-auto-grid,
+.problem-row-grid,
+.free-problem-canvas,
+.math-block {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.auto-page-spacer {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  pointer-events: none;
+}
+
+@media print {
+  .print-block,
+  .sidebox-layout,
+  .test-layout-block,
+  .diagram-block,
+  .numberline-block,
+  .coordinate-block,
+  .geometry-block,
+  .text-auto-grid,
+  .problem-row-grid,
+  .free-problem-canvas,
+  .math-block {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+
+/* v66: 見出しだけがページ下に残るのを防ぐ */
+.print-block[data-block-type="heading"] {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+.print-heading {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+
+/* v67: Word風に、見出しを次の本文と分離させない */
+.print-block[data-block-type="heading"],
+.print-heading {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+
+/* v68: 印刷プレビューを編集中のページ分割プレビューに完全一致させる */
+@media print {
+  html,
+  body {
+    width: var(--paper-width) !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  .app-header,
+  .editor-panel,
+  .preview-toolbar {
+    display: none !important;
+  }
+
+  .layout,
+  .preview-panel {
+    display: block !important;
+    width: var(--paper-width) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  #printArea.paper.paged-preview-sliced {
+    display: block !important;
+    width: var(--paper-width) !important;
+    min-width: var(--paper-width) !important;
+    max-width: var(--paper-width) !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+  }
+
+  /* 印刷では元の長い本文ソースは絶対に印字しない。
+     画面で見えている、ページ分割済みの .print-page だけを印刷する。 */
+  #printArea.paged-preview-sliced .print-flow-source {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page {
+    display: block !important;
+    position: relative !important;
+    width: var(--paper-width) !important;
+    min-width: var(--paper-width) !important;
+    max-width: var(--paper-width) !important;
+    height: var(--paper-height) !important;
+    min-height: var(--paper-height) !important;
+    max-height: var(--paper-height) !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: var(--paper-padding-top) var(--paper-padding-right) var(--paper-padding-bottom) var(--paper-padding-left) !important;
+    overflow: hidden !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page:last-child {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page-body {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: var(--paper-body-height) !important;
+    min-height: var(--paper-body-height) !important;
+    max-height: var(--paper-body-height) !important;
+    overflow: hidden !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page-slice {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page-label {
+    display: none !important;
+  }
+}
+
+
+/* v69: ページ境界で前ページ側に残る見出しを非表示にする */
+.hide-boundary-heading {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@media print {
+  .hide-boundary-heading {
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+}
+
+
+/* v72: 編集プレビューと印刷プレビューを同じページ構造にする */
+@media print {
+  #printArea.paged-preview-sliced .print-flow-source {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page {
+    width: var(--paper-width) !important;
+    min-width: var(--paper-width) !important;
+    max-width: var(--paper-width) !important;
+    height: var(--paper-height) !important;
+    min-height: var(--paper-height) !important;
+    max-height: var(--paper-height) !important;
+    box-sizing: border-box !important;
+    padding: var(--paper-padding-top) var(--paper-padding-right) var(--paper-padding-bottom) var(--paper-padding-left) !important;
+    overflow: hidden !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page:last-child {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page-body {
+    height: var(--paper-body-height) !important;
+    min-height: var(--paper-body-height) !important;
+    max-height: var(--paper-body-height) !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page-slice {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  #printArea.paged-preview-sliced .print-page-label {
+    display: none !important;
+  }
+}
+
+
+/* v75: 本文の選択範囲だけにフォント設定を反映 */
+.inline-custom-style {
+  display: inline;
+}
+
+/* v75: ページ下端で行が切れて残らないようにする */
+.auto-line-page-spacer {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  pointer-events: none !important;
+  line-height: 0 !important;
+}
+
+@media print {
+  .auto-line-page-spacer {
+    display: block !important;
+  }
+}
+
+
+/* v76: Word風ファイルメニュー */
+.file-menu {
+  position: relative;
+}
+
+.file-menu > summary {
+  list-style: none;
+  cursor: pointer;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: #ffffff;
+  font-weight: 700;
+  user-select: none;
+}
+
+.file-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.file-menu[open] > summary {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.file-menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 100;
+  display: grid;
+  min-width: 220px;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+}
+
+.file-menu-panel button {
+  width: 100%;
+  text-align: left;
+  justify-content: flex-start;
+}
+
+.file-menu-panel hr {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+  margin: 4px 0;
+}
+
+.current-file-name {
+  color: #334155;
+  font-size: 13px;
+  max-width: 220px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
